@@ -99,15 +99,15 @@ def main():
     my_add_argument(parser, "rmdups", True, "remove duplicate entries or not")
     my_add_argument(parser, "rm_hashtag", True, "remove hash tags or not")
     my_add_argument(parser, "rm_noisy_katakana", True, "remove noisy katakana words or not")
-    my_add_argument(parser, "rm_person", False, "remove person names or not")
-    my_add_argument(parser, "rm_emoji", False, "remove emojis or not")
-    my_add_argument(parser, "rm_symbol", False, "remove symbols or not")
-    my_add_argument(parser, "rm_numeral", False, "remove numerals or not")
+    my_add_argument(parser, "rm_person", False, "remove person names or not")  # 人名は有用なので削除しない
+    my_add_argument(parser, "rm_emoji", True, "remove emojis or not")
+    my_add_argument(parser, "rm_symbol", True, "remove symbols or not")
+    my_add_argument(parser, "rm_numeral", False, "remove numerals or not")  # 単位系は有用なので削除しない
     my_add_argument(parser, "rm_wrong_yomi", True, "remove words with possibly wrong yomi or not")
     my_add_argument(parser, "rm_special_particle", True, "remove words with special particles \"は\" or \"へ\"")
     my_add_argument(parser, "cor_longvow", True, "correct long vowel errors or not")
     my_add_argument(parser, "cor_yomi_num", True, "correct the yomi of numerals or not")
-    my_add_argument(parser, "normalize", False, "normalize the surface forms by applying "
+    my_add_argument(parser, "normalize", True, "normalize the surface forms by applying "
         "NFKC Unicode normalization, "
         "capitalization of alphabets, "
         "and "

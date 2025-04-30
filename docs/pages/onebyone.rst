@@ -17,7 +17,7 @@ For yomi, it uses the best estimates from MeCab and UniDic.
 
 .. code-block:: console
 
-    $ echo 機械学習 | docker run tdmelodic:latest tdmelodic-s2ya
+    $ echo 機械学習 | docker run -i tdmelodic:latest tdmelodic-s2ya
 
 Then you will have the following result.
 
@@ -29,7 +29,7 @@ It is convenient to define an alias command as follows.
 
 .. code-block:: console
 
-    $ alias tdmelodic-s2ya="docker run tdmelodic:latest tdmelodic-s2ya"
+    $ alias tdmelodic-s2ya="docker run -i tdmelodic:latest tdmelodic-s2ya"
 
 Using this, try other examples.
 

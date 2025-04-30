@@ -7,6 +7,7 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 # apt-get に対話的に設定を確認されないための設定
 ENV DEBIAN_FRONTEND=noninteractive
 
+# 依存パッケージをインストール
 RUN apt-get update && \
     apt-get install -y --no-install-recommends software-properties-common && \
     add-apt-repository -y ppa:deadsnakes/ppa && \
@@ -31,10 +32,14 @@ RUN apt-get update && \
 RUN locale-gen ja_JP.UTF-8 \
     && echo "export LANG=ja_JP.UTF-8" >> ~/.bashrc
 
+# pip をインストール
+RUN curl https://bootstrap.pypa.io/get-pip.py | python3.11
+
 # UniDic をインストール
+WORKDIR /code/
 RUN curl -LO https://clrd.ninjal.ac.jp/unidic_archive/cwj/2.1.2/unidic-mecab_kana-accent-2.1.2_src.zip && \
     unzip unidic-mecab_kana-accent-2.1.2_src.zip && \
-    cd /tmp/unidic-mecab_kana-accent-2.1.2_src && \
+    cd unidic-mecab_kana-accent-2.1.2_src && \
     ./configure && make && make install && cd - && \
     rm unidic-mecab_kana-accent-2.1.2_src.zip && rm -rf unidic-mecab_kana-accent-2.1.2_src
 
@@ -44,7 +49,6 @@ RUN pip install -r /code/requirements.txt
 
 # tdmelodic モジュールをインストール
 COPY . /code/
-WORKDIR /code
 RUN pip install .
 
 # ワークスペースディレクトリ

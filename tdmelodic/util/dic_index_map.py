@@ -6,6 +6,8 @@
 # LICENSE file in the root directory of this source tree.
 # -----------------------------------------------------------------------------
 
+# UniDic 2.1.2 の素性
+# mecab-unidic-NEologd は 2.1.2 の素性を使っており、UniDic 3.x とは互換性がない
 unidic_index_map = {
     # see also mecabrc
     "SURFACE": 0,
@@ -20,6 +22,8 @@ unidic_index_map = {
     "ACCENT": 27,  # f[23]:  aType
 }
 
+# IPADic 2.7.0 の素性
+# OpenJTalk で使われている naist-jdic の拡張版の素性とも一致する
 ipadic_index_map = {
     # see also mecabrc
     "SURFACE": 0,
@@ -28,8 +32,8 @@ ipadic_index_map = {
     "POS2": 5,
     "POS3": 6,
     "POS4": 7,
-    "LEMMA": 10,
-    "YOMI": 12,
+    "LEMMA": 10,  # 原型
+    "YOMI": 12,  # 正確には「読み」ではなく「発音」
     "GOSHU": 9, # We do not use this element. Dummy value.
     "ACCENT": 9, # We do not use this element. Dummy value.
 }

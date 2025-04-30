@@ -1,53 +1,53 @@
 FROM ubuntu:20.04
-# To enable GPU, use other base images such as
-# nvidia/cuda:10.0-devel-ubuntu16.04
 
-# apt
+# タイムゾーンを東京に設定
+ENV TZ=Asia/Tokyo
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
+# apt-get に対話的に設定を確認されないための設定
 ENV DEBIAN_FRONTEND=noninteractive
-RUN apt-get update -y && \
-    apt-get install -y --no-install-recommends \
-        build-essential \
-        gcc g++ cmake \
-        unzip xz-utils \
-    	libblas3 libblas-dev \
-        mecab libmecab-dev swig \
-        locales \
-        nkf \
-        fonts-ipafont fonts-ipaexfont fonts-takao-pgothic fonts-takao-mincho \
-        python3-dev python3-pip python3-setuptools python3-tk && \
-    rm -rf /var/lib/apt/lists/*
-# The fonts are used only for plotting images (optional). The line can be removed.
 
-# language=Japanese
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends software-properties-common && \
+    add-apt-repository -y ppa:deadsnakes/ppa && \
+    apt-get install -y \
+        build-essential cmake gcc g++ \
+        curl unzip xz-utils \
+        libblas3 libblas-dev \
+        mecab libmecab-dev swig \
+        locales nkf \
+        python3.11 \
+        python3.11-dev \
+        python3.11-distutils \
+        python3.11-venv \
+        zlib1g \
+        zlib1g-dev && \
+    apt-get -y autoremove && \
+    apt-get -y clean && \
+    rm -rf /var/lib/apt/lists/* && \
+    rm -rf /tmp/*
+
+# ロケールを日本語に設定
 RUN locale-gen ja_JP.UTF-8 \
     && echo "export LANG=ja_JP.UTF-8" >> ~/.bashrc
 
-# Python
-ARG PYTHON_VERSION=3.7
-RUN echo "alias python='python3'" >> ~/.bash_aliases
-
-# Install UniDic
-# Download this file in advance. The downloaded file will be reused later.
-ARG UNIDIC='unidic-mecab_kana-accent-2.1.2_src'
-COPY ${UNIDIC}.zip /tmp
-WORKDIR /tmp
-RUN unzip ${UNIDIC}.zip && \
-    cd /tmp/${UNIDIC} && \
+# UniDic をインストール
+RUN curl -LO https://clrd.ninjal.ac.jp/unidic_archive/cwj/2.1.2/unidic-mecab_kana-accent-2.1.2_src.zip && \
+    unzip unidic-mecab_kana-accent-2.1.2_src.zip && \
+    cd /tmp/unidic-mecab_kana-accent-2.1.2_src && \
     ./configure && make && make install && cd - && \
-    rm ${UNIDIC}.zip && rm -rf ${UNIDIC}
+    rm unidic-mecab_kana-accent-2.1.2_src.zip && rm -rf unidic-mecab_kana-accent-2.1.2_src
 
-# pip
-ENV pip='python3 -m pip'
-RUN $pip install --upgrade pip && \
-    $pip install --upgrade setuptools && \
-    $pip install wheel
+# 依存関係をインストール
+COPY requirements.txt /code/
+RUN pip install -r /code/requirements.txt
 
-# install tdmelodic
-COPY . /tmp
-WORKDIR /tmp
-RUN $pip install .
+# tdmelodic モジュールをインストール
+COPY . /code/
+WORKDIR /code
+RUN pip install .
 
-# workspace
+# ワークスペースディレクトリ
 ARG workspace=/root/workspace
 RUN mkdir -p $workspace
 WORKDIR $workspace

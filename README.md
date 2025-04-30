@@ -1,3 +1,40 @@
+# tdmelodic (fork)
+
+tdmelodic 本家の Docker イメージは長らく更新されていません。  
+また5年以上前に開発が停止された Chainer で開発されていること、部分的に MeCab に依存していることから、Docker を使わずに動作環境を構築するのは難易度が高いです。
+
+このフォークでは、Docker イメージの整備・前処理の改善など、使い続けるにあたっての最小限の改善を行っています。
+
+> [!TIP]
+> 機械学習モデルは今となっては非常に軽量な類のため、CUDA を使わずとも CPU だけで高速に動作します。  
+> このため、CUDA 版イメージは用意していません。
+
+### Docker イメージの取得
+
+```bash
+$ docker pull ghcr.io/tsukumijima/tdmelodic:latest
+```
+
+上記コマンドで、このフォーク版 tdmelodic の最新の Docker イメージを取得できます。  
+`tdmelodic:latest` には、GitHub Actions により、最新の master ブランチのコードが自動的にビルド・公開されています。
+
+### テスト
+
+```bash
+$ echo "上総一ノ宮" | docker run -i tdmelodic tdmelodic-s2ya
+カ]ズサイ[チノ]ミヤ
+
+$ echo "北品川,キタシナガワ" | docker run -i tdmelodic tdmelodic-sy2a
+キ[タシナ]ガワ
+```
+
+-----
+
+下記ならびに [docs/](docs/) 以下のドキュメントは、tdmelodic 本家のドキュメントを改変なしでそのまま引き継いでいます。  
+これらのドキュメントの内容がこのフォークにも通用するかは保証されません。
+
+-----
+
 <p align="center">
 <img src="https://github.com/PKSHATechnology-Research/tdmelodic/raw/master/docs/imgs/logo/logo_tdmelodic.svg" width="200" />
 </p>

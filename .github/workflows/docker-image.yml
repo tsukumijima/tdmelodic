@@ -4,8 +4,11 @@ on:
   push:
     branches: [ master ]
     paths:
-      - 'Dockerfile'
       - '.github/workflows/docker-image.yml'
+      - 'Dockerfile'
+      - 'requirements.txt'
+      - 'setup.py'
+      - 'tdmelodic/**/*.py'
 
 env:
   REGISTRY: ghcr.io

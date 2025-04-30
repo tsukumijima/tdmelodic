@@ -63,7 +63,7 @@ class WordType(object):
         return all([flag1])
 
     def is_road(self, line):
-        """ extract station """
+        """ extract road """
         flag1 = re.search(r"^\p{Han}+道.*\d号.+線$", line[self.map["SURFACE"]], flags=0)
         return all([flag1])
 

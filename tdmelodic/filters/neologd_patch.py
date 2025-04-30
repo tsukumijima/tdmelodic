@@ -67,7 +67,7 @@ class NeologdPatch(object):
     def normalize_surface(self, line, idx_surface=None):
         s = line[idx_surface]
         s = unicodedata.normalize("NFKC", s)
-        s = s.upper()
+        # s = s.upper()  # 表層形は大文字にしない
         s = jaconv.normalize(s, "NFKC")
         s = jaconv.h2z(s, digit=True, ascii=True, kana=True)
         s = s.replace("\u00A5", "\uFFE5") # yen symbol
@@ -100,6 +100,13 @@ class NeologdPatch(object):
         if self.rm_numeral:
             if self.wt.is_numeral(line):
                 return None
+
+        # 冗長な株式会社, 有限会社, 学校名の prefix または suffix がついた単語を削除
+        # ref: https://github.com/amamama/miniature-adventure/blob/main/tdmelodic_modify_accent.patch
+        if (self.wt.is_KK(line) or
+            self.wt.is_YK(line) or
+            self.wt.is_school(line)):
+            return None
 
         line = copy.deepcopy(line)
 
